@@ -14,9 +14,10 @@ const App = () => {
   const [url, setUrl] = React.useState(
     `${SPOTIFY_API_SEARCH}${searchTerm}`
   );
+  const [spotifyToken, setSpotifyToken] = React.useState('');
 
   const getSpotifyToken = () => {
-    axios({
+    return axios({
       method: 'post',
       url: SPOTIFY_API_AUTH,
       headers: { 
@@ -24,23 +25,43 @@ const App = () => {
         'Content-Type': 'application/x-www-form-urlencoded', 
       },
       data : qs.stringify({'grant_type': 'client_credentials'})
+    }).then((res) => {
+      return res.data;
     })
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
   }
 
-  getSpotifyToken();
+  React.useEffect(() => {
+    if (spotifyToken === "") {
+      getSpotifyToken().then((data) => {
+        setSpotifyToken(data.access_token);
+      });
+    }
+  }, [spotifyToken]);
+
+  const handleFetchSearch= React.useCallback(() => {
+    axios({
+      method: 'get',
+      url,
+      headers: {
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${spotifyToken}`,
+        'Content-Type': 'application/json',
+      }
+    }).then((res) => {
+      return res.data;
+    })
+  }, [url, spotifyToken]);
+
+  React.useEffect(() => {
+    handleFetchSearch();
+  }, [handleFetchSearch]);
 
   const handleSearchInput = event => {
     setSearchTerm(event.target.value);
   };
 
   const handleSearchSubmit = () => {
-    setUrl(`${SPOTIFY_API_SEARCH}${searchTerm}`);
+    setUrl(`${SPOTIFY_API_SEARCH}${searchTerm}&type=artist`);
   };
 
   return (
