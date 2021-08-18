@@ -11,6 +11,7 @@ const BASIC_AUTH = Buffer.from(
 
 const App = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchFilter, setSearchFilter] = React.useState("artist");
   const [url, setUrl] = React.useState(
     `${SPOTIFY_API_SEARCH}${searchTerm}`
   );
@@ -38,7 +39,7 @@ const App = () => {
     }
   }, [spotifyToken]);
 
-  const handleFetchSearch= React.useCallback(() => {
+  React.useEffect(() => {
     axios({
       method: 'get',
       url,
@@ -48,25 +49,27 @@ const App = () => {
         'Content-Type': 'application/json',
       }
     }).then((res) => {
+      console.log(res.data);
       return res.data;
     })
   }, [url, spotifyToken]);
-
-  React.useEffect(() => {
-    handleFetchSearch();
-  }, [handleFetchSearch]);
 
   const handleSearchInput = event => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSearchSubmit = () => {
-    setUrl(`${SPOTIFY_API_SEARCH}${searchTerm}&type=artist`);
+  const handleSearchSubmit = event => {
+    setUrl(`${SPOTIFY_API_SEARCH}${searchTerm}&type=${searchFilter}`);
   };
 
   return (
     <div className="App">
       <Search onSearch={handleSearchInput}/>
+      <SearchOptions 
+        searchFilter={searchFilter} 
+        setSearchFilter={setSearchFilter}
+      />
+
       <button
         type="button"
         disabled={!searchTerm}
@@ -88,6 +91,34 @@ const Search = ({ search, onSearch }) => {
         value={search} 
         onChange={onSearch} 
       />
+    </div>
+  )
+}
+
+const SearchOptions = ({ searchFilter, setSearchFilter }) => {
+  return (
+    <div>
+      <label>
+        Artist
+        <input
+          type="radio"
+          name="searchType"
+          value="artist"
+          checked={searchFilter === "artist"}
+          onChange={event => setSearchFilter(event.target.value)}
+        />
+      </label>
+
+      <label>
+        Track
+        <input
+          type="radio"
+          name="searchType"
+          value="track"
+          checked={searchFilter === "track"}
+          onChange={event => setSearchFilter(event.target.value)}
+        />
+      </label>
     </div>
   )
 }
