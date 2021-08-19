@@ -12,23 +12,19 @@ const BASIC_AUTH = Buffer.from(
 const App = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [searchFilter, setSearchFilter] = React.useState("artist");
-  const [url, setUrl] = React.useState(
-    `${SPOTIFY_API_SEARCH}${searchTerm}`
-  );
   const [spotifyToken, setSpotifyToken] = React.useState('');
 
-  const getSpotifyToken = () => {
-    return axios({
+  const getSpotifyToken = async () => {
+    const res = await axios({
       method: 'post',
       url: SPOTIFY_API_AUTH,
-      headers: { 
-        'Authorization': `Basic ${BASIC_AUTH}`, 
-        'Content-Type': 'application/x-www-form-urlencoded', 
+      headers: {
+        'Authorization': `Basic ${BASIC_AUTH}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      data : qs.stringify({'grant_type': 'client_credentials'})
-    }).then((res) => {
-      return res.data;
-    })
+      data: qs.stringify({ 'grant_type': 'client_credentials' })
+    });
+    return res.data;
   }
 
   React.useEffect(() => {
@@ -39,10 +35,14 @@ const App = () => {
     }
   }, [spotifyToken]);
 
-  React.useEffect(() => {
+  const handleSearchInput = event => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = () => {
     axios({
       method: 'get',
-      url,
+      url: `${SPOTIFY_API_SEARCH}${searchTerm}&type=${searchFilter}`,
       headers: {
         'Accept': 'application/json', 
         'Authorization': `Bearer ${spotifyToken}`,
@@ -52,14 +52,6 @@ const App = () => {
       console.log(res.data);
       return res.data;
     })
-  }, [url, spotifyToken]);
-
-  const handleSearchInput = event => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSearchSubmit = event => {
-    setUrl(`${SPOTIFY_API_SEARCH}${searchTerm}&type=${searchFilter}`);
   };
 
   return (
