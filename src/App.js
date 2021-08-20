@@ -10,9 +10,10 @@ const BASIC_AUTH = Buffer.from(
 ).toString('base64');
 
 const App = () => {
+  const [spotifyToken, setSpotifyToken] = React.useState('');
   const [searchTerm, setSearchTerm] = React.useState('');
   const [searchFilter, setSearchFilter] = React.useState("artist");
-  const [spotifyToken, setSpotifyToken] = React.useState('');
+  const [searchResults, setSearchResults] = React.useState([]);
 
   const getSpotifyToken = async () => {
     const res = await axios({
@@ -37,7 +38,7 @@ const App = () => {
 
   const handleSearchInput = event => {
     setSearchTerm(event.target.value);
-  };
+  }
 
   const handleSearchSubmit = () => {
     axios({
@@ -50,9 +51,13 @@ const App = () => {
       }
     }).then((res) => {
       console.log(res.data);
-      return res.data;
-    })
-  };
+      if (res.data.artists) {
+        setSearchResults([...res.data.artists.items])
+      } else { 
+        setSearchResults([...res.data.tracks.items]);
+      }
+    });
+  }
 
   return (
     <div className="App">
@@ -69,6 +74,7 @@ const App = () => {
       >
         Submit
       </button>
+      <SearchResult searchResults={searchResults} />
     </div>
   );
 }
@@ -111,6 +117,24 @@ const SearchOptions = ({ searchFilter, setSearchFilter }) => {
           onChange={event => setSearchFilter(event.target.value)}
         />
       </label>
+    </div>
+  )
+}
+
+const SearchResult = ({ searchResults }) => {
+  return (
+    <div>
+      {searchResults.length ? 
+        <div>
+          {searchResults.map((result) => (
+            <li key={result.id}>
+              {result.name}
+            </li>
+          ))}
+        </div>
+        : 
+        <div>No results</div>
+      }
     </div>
   )
 }
