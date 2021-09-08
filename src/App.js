@@ -74,7 +74,11 @@ const App = () => {
       >
         Submit
       </button>
-      <SearchResult searchResults={searchResults} />
+      <SearchResult 
+        searchResults={searchResults} 
+        spotifyToken={spotifyToken}
+        searchFilter={searchFilter}
+      />
     </div>
   );
 }
@@ -121,21 +125,56 @@ const SearchOptions = ({ searchFilter, setSearchFilter }) => {
   )
 }
 
-const SearchResult = ({ searchResults }) => {
+const SearchResult = ({ searchResults, spotifyToken, searchFilter }) => {
   return (
     <div>
       {searchResults.length ? 
         <div>
           {searchResults.map((result) => (
-            <li key={result.id}>
-              {result.name}
-            </li>
+            <SearchResultItem
+              key={result.id}
+              result={result}
+              spotifyToken={spotifyToken}
+              searchFilter={searchFilter}
+            />
           ))}
         </div>
         : 
         <div>No results</div>
       }
     </div>
+  )
+}
+
+const SearchResultItem = ({ result, spotifyToken, searchFilter }) => {
+  const SPOTIFY_API_RECOMMENDATIONS = 'https://api.spotify.com/v1/recommendations?seed_'
+
+  const handleSearchSelection = (result) => {
+    console.log(result.id);
+    getRecommendations(result.id);
+
+  }
+
+  const getRecommendations = (id) => {
+    axios({
+      method: 'get',
+      url: `${SPOTIFY_API_RECOMMENDATIONS}${searchFilter}s=${id}`,
+      headers: {
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${spotifyToken}`,
+        'Content-Type': 'application/json',
+      }
+    }).then((res) => {
+      console.log(res.data);
+    });
+  }
+
+  return (
+    <li
+      onClick={() => handleSearchSelection(result)}
+    >
+      {result.name}
+    </li>
   )
 }
 
