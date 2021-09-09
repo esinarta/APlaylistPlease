@@ -6,9 +6,17 @@ import qs from 'qs';
 const SPOTIFY_API_AUTH = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_SEARCH = 'https://api.spotify.com/v1/search?q=';
 const SPOTIFY_API_RECOMMENDATIONS = 'https://api.spotify.com/v1/recommendations?seed_'
+const SPOTIFY_API_USER_AUTH = 'https://accounts.spotify.com/authorize';
 const BASIC_AUTH = Buffer.from(
   `${process.env.REACT_APP_SPOTIFY_CLIENT_ID}:${process.env.REACT_APP_SPOTIFY_CLIENT_SECRET}`
 ).toString('base64');
+const scope = 'playlist-modify-private playlist-modify-public';
+
+let url = SPOTIFY_API_USER_AUTH;
+url += '?response_type=token';
+url += '&client_id=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_CLIENT_ID);
+url += '&scope=' + encodeURIComponent(scope);
+url += '&redirect_uri=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_REDIRECT);
 
 const App = () => {
   const [spotifyToken, setSpotifyToken] = React.useState('');
@@ -105,6 +113,12 @@ const App = () => {
       <Playlist
         playlist={playlist}
       />
+      <br/>
+      <a
+        href={url}
+      >
+        Connect to Spotify
+      </a>
       
     </div>
   );
