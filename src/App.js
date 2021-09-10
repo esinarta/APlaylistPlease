@@ -29,6 +29,9 @@ const App = () => {
   const [playlist, setPlaylist] = React.useState([]);
   const [userToken, setUserToken] = React.useState('');
   const [userId, setUserId] = React.useState('');
+  const [playlistName, setPlaylistName] = React.useState('');
+  const [playlistDesc, setPlaylistDesc] = React.useState('');
+  const [playlistPublic, setPlaylistPublic] = React.useState(true);
 
   const getSpotifyToken = async () => {
     const res = await axios({
@@ -134,7 +137,7 @@ const App = () => {
     }
   }, [userId, getUserId, userToken]);
 
-  const savePlaylist = () => {
+  const savePlaylist = (playlistName, playlistDesc, playlistPublic) => {
     axios({
       method: 'post',
       url: `${SPOTIFY_API_USER_PLAYLIST}${userId}/playlists`,
@@ -144,9 +147,9 @@ const App = () => {
         'Content-Type': 'application/json',
       },
       data: JSON.stringify({ 
-        'name': 'New Playlist',
-        'description': 'Description',
-        'public': false,
+        'name': playlistName,
+        'description': playlistDesc,
+        'public': playlistPublic,
       })
     }).then((res) => {
       let playlistId = res.data.id;
@@ -179,6 +182,14 @@ const App = () => {
     });
   }
 
+  const handlePlaylistNameInput = event => {
+    setPlaylistName(event.target.value);
+  }
+
+  const handlePlaylistDescInput = event => {
+    setPlaylistDesc(event.target.value);
+  }
+
   return (
     <div className="App">
       <Search onSearch={handleSearchInput}/>
@@ -204,17 +215,33 @@ const App = () => {
         playlist={playlist}
       />
       <br/>
-      <a
-        href={userAuthUrl}
-      >
-        Connect to Spotify
-      </a>
 
-      <button
-        onClick={() => savePlaylist()}
-      >
-        Save Playlist
-      </button>
+    { playlist.length && userToken ?
+      <div>
+        <PlaylistForm
+          playListName={playlistName}
+          playlistDesc={playlistDesc}
+          playlistPublic={playlistPublic}
+          setPlaylistPublic={setPlaylistPublic}
+          handlePlaylistNameInput={handlePlaylistNameInput}
+          handlePlaylistDescInput={handlePlaylistDescInput}
+        />
+        <button
+        onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
+        >
+          Save Playlist
+        </button>
+      </div>
+      :
+      <div></div>
+    }
+
+    <br/>
+    <a
+      href={userAuthUrl}
+    >
+      Connect to Spotify
+    </a>
       
     </div>
   );
@@ -299,6 +326,54 @@ const Playlist = ({ playlist }) => {
         : 
         <div></div>
       }
+    </div>
+  )
+}
+
+const PlaylistForm = (props) => {
+  return (
+    <div>
+      <div>
+        <label htmlFor="search">Playlist Name: </label>
+        <input 
+          id="playlistName" 
+          type="text" 
+          value={props.playListName} 
+          onChange={props.handlePlaylistNameInput}
+        />
+      </div>
+      <div>
+        <label htmlFor="search">Playlist Description: </label>
+        <input 
+          id="playlistDesc" 
+          type="text" 
+          value={props.playlistDesc} 
+          onChange={props.handlePlaylistDescInput}
+        />
+      </div>
+      <div>
+        <label>
+          Public
+          <input
+            type="radio"
+            name="playlistPublic"
+            value="public"
+            checked={props.playlistPublic}
+            onChange={event => props.setPlaylistPublic(event.target.value)}
+          />
+        </label>
+
+        <label>
+          Private
+          <input
+            type="radio"
+            name="playlistPublic"
+            value="private"
+            checked={!props.playlistPublic}
+            onChange={event => props.setPlaylistPublic(!event.target.value)}
+          />
+        </label>
+      </div>
     </div>
   )
 }
