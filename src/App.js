@@ -7,16 +7,19 @@ const SPOTIFY_API_AUTH = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_SEARCH = 'https://api.spotify.com/v1/search?q=';
 const SPOTIFY_API_RECOMMENDATIONS = 'https://api.spotify.com/v1/recommendations?seed_'
 const SPOTIFY_API_USER_AUTH = 'https://accounts.spotify.com/authorize';
+const SPOTIFY_API_USER_PROFILE = 'https://api.spotify.com/v1/me';
+const SPOTIFY_API_USER_PLAYLIST = 'https://api.spotify.com/v1/users/';
+const SPOTIFY_API_USER_PLAYLIST_ADD = 'https://api.spotify.com/v1/playlists/';
 const BASIC_AUTH = Buffer.from(
   `${process.env.REACT_APP_SPOTIFY_CLIENT_ID}:${process.env.REACT_APP_SPOTIFY_CLIENT_SECRET}`
 ).toString('base64');
 const scope = 'playlist-modify-private playlist-modify-public';
 
-let url = SPOTIFY_API_USER_AUTH;
-url += '?response_type=token';
-url += '&client_id=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_CLIENT_ID);
-url += '&scope=' + encodeURIComponent(scope);
-url += '&redirect_uri=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_REDIRECT);
+let userAuthUrl = SPOTIFY_API_USER_AUTH;
+userAuthUrl += '?response_type=token';
+userAuthUrl += '&client_id=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_CLIENT_ID);
+userAuthUrl += '&scope=' + encodeURIComponent(scope);
+userAuthUrl += '&redirect_uri=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_REDIRECT);
 
 const App = () => {
   const [spotifyToken, setSpotifyToken] = React.useState('');
@@ -24,6 +27,8 @@ const App = () => {
   const [searchFilter, setSearchFilter] = React.useState("artist");
   const [searchResults, setSearchResults] = React.useState([]);
   const [playlist, setPlaylist] = React.useState([]);
+  const [userToken, setUserToken] = React.useState('');
+  const [userId, setUserId] = React.useState('');
 
   const getSpotifyToken = async () => {
     const res = await axios({
@@ -89,6 +94,91 @@ const App = () => {
     });
   }
 
+  // Function taken from Spotify API example:
+  // https://github.com/spotify/web-api-auth-examples/blob/master/implicit_grant/public/index.html
+  const getHashParams = () => {
+    let hashParams = {};
+    let e, r = /([^&;=]+)=?([^&;]*)/g, q = window.location.hash.substring(1);
+    while (e = r.exec(q)) {
+       hashParams[e[1]] = decodeURIComponent(e[2]);
+    }
+    return hashParams;
+  }
+
+  let params = getHashParams();
+
+  React.useEffect(() => {
+    if (userToken === "") {
+      setUserToken(params.access_token);
+    }
+  }, [userToken, params.access_token]);
+
+  const getUserId = async () => {
+    const res = await axios({
+      method: 'get',
+      url: `${SPOTIFY_API_USER_PROFILE}`,
+      headers: {
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${userToken}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    return res.data;
+  }
+
+  React.useEffect(() => {
+    if (userId === "" && userToken) {
+      getUserId().then((data) => {
+        setUserId(data.id);
+      });
+    }
+  }, [userId, getUserId]);
+
+  const savePlaylist = () => {
+    axios({
+      method: 'post',
+      url: `${SPOTIFY_API_USER_PLAYLIST}${userId}/playlists`,
+      headers: {
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${userToken}`,
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify({ 
+        'name': 'New Playlist',
+        'description': 'Description',
+        'public': false,
+      })
+    }).then((res) => {
+      let playlistId = res.data.id;
+      let trackUrisArray = [];
+
+      playlist.forEach((track) => {
+        trackUrisArray.push(track.uri);
+      });
+
+      let trackUrisObj = {
+        uris: trackUrisArray,
+      }
+
+      addTracksToPlaylist(playlistId, trackUrisObj);
+    });
+  }
+
+  const addTracksToPlaylist = (playlistId, trackUris) => {
+    axios({
+      method: 'post',
+      url: `${SPOTIFY_API_USER_PLAYLIST_ADD}${playlistId}/tracks`,
+      headers: {
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${userToken}`,
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify(trackUris),
+    }).then((res) => {
+      console.log(res.data);
+    });
+  }
+
   return (
     <div className="App">
       <Search onSearch={handleSearchInput}/>
@@ -115,10 +205,16 @@ const App = () => {
       />
       <br/>
       <a
-        href={url}
+        href={userAuthUrl}
       >
         Connect to Spotify
       </a>
+
+      <button
+        onClick={() => savePlaylist()}
+      >
+        Save Playlist
+      </button>
       
     </div>
   );
