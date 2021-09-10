@@ -113,18 +113,18 @@ const App = () => {
     }
   }, [userToken, params.access_token]);
 
-  const getUserId = async () => {
-    const res = await axios({
-      method: 'get',
-      url: `${SPOTIFY_API_USER_PROFILE}`,
-      headers: {
-        'Accept': 'application/json', 
-        'Authorization': `Bearer ${userToken}`,
-        'Content-Type': 'application/json',
-      }
-    })
-    return res.data;
-  }
+  const getUserId = React.useCallback(async () => {
+      const res =await axios({
+        method: 'get',
+        url: `${SPOTIFY_API_USER_PROFILE}`,
+        headers: {
+          'Accept': 'application/json', 
+          'Authorization': `Bearer ${userToken}`,
+          'Content-Type': 'application/json',
+        }
+      })
+      return res.data;
+    }, [userToken]);
 
   React.useEffect(() => {
     if (userId === "" && userToken) {
@@ -132,7 +132,7 @@ const App = () => {
         setUserId(data.id);
       });
     }
-  }, [userId, getUserId]);
+  }, [userId, getUserId, userToken]);
 
   const savePlaylist = () => {
     axios({
