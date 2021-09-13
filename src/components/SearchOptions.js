@@ -1,7 +1,11 @@
 const SearchOptions = ({ searchFilter, setSearchFilter }) => {
+  const style = {
+    padding: "1rem",
+  }
+  
   return (
-    <div>
-      <label>
+    <div style={style}>
+      <label style={style}>
         Artist
         <input
           type="radio"
@@ -12,7 +16,7 @@ const SearchOptions = ({ searchFilter, setSearchFilter }) => {
         />
       </label>
 
-      <label>
+      <label style={style}>
         Song
         <input
           type="radio"

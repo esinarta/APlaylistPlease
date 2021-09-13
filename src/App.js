@@ -9,6 +9,7 @@ import SearchResult from './components/SearchResult';
 import Playlist from './components/Playlist';
 import PlaylistForm from './components/PlaylistForm';
 import ConnectButton from './components/ConnectButton';
+import AppButton from './components/AppButton';
 
 const SPOTIFY_API_AUTH = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_SEARCH = 'https://api.spotify.com/v1/search?q=';
@@ -75,7 +76,6 @@ const App = () => {
         'Content-Type': 'application/json',
       }
     }).then((res) => {
-      console.log(res.data);
       if (res.data.artists) {
         setSearchResults([...res.data.artists.items])
       } else { 
@@ -85,7 +85,6 @@ const App = () => {
   }
 
   const handleSearchSelection = (result) => {
-    console.log(result.id);
     getRecommendations(result.id);
   }
 
@@ -99,7 +98,6 @@ const App = () => {
         'Content-Type': 'application/json',
       }
     }).then((res) => {
-      console.log(res.data);
       setPlaylist([...res.data.tracks]);
     });
   }
@@ -212,13 +210,11 @@ const App = () => {
         setSearchFilter={setSearchFilter}
       />
 
-      <button
-        type="button"
+      <AppButton
+        text="Submit"
         disabled={!searchTerm}
         onClick={handleSearchSubmit}
-      >
-        Submit
-      </button>
+      />
 
       <SearchResult 
         searchResults={searchResults} 

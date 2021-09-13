@@ -1,9 +1,9 @@
 const SearchResult = ({ searchResults, handleSearchSelection }) => {
   return (
     <div>
-      <h4>Search Results: </h4>
       {searchResults.length ? 
         <div>
+          <h4>Search Results: </h4>
           {searchResults.map((result) => (
             <li
               key={result.id}
@@ -14,7 +14,7 @@ const SearchResult = ({ searchResults, handleSearchSelection }) => {
           ))}
         </div>
         : 
-        <div>No results</div>
+        <div></div>
       }
     </div>
   )

@@ -15,8 +15,8 @@ const ConnectButton = ({ link }) => {
   }
 
   const iconStyle = {
-    height: "20px",
-    width: "20px",
+    height: "21px",
+    width: "21px",
     paddingRight: "0.5em"
   }
 
