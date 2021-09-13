@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
 .App {
   text-align: center;
+}
+
+body {
+  color: white;
+  background: linear-gradient(#2C2C2C 0%, rgba(44, 44, 44, 0.9) 99.99%, rgba(44, 44, 44, 0) 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+ConnectButton {
+  display: flex;
+  margin-left: auto;
 }

@@ -13,7 +13,7 @@ const SearchOptions = ({ searchFilter, setSearchFilter }) => {
       </label>
 
       <label>
-        Track
+        Song
         <input
           type="radio"
           name="searchType"

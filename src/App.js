@@ -8,6 +8,7 @@ import SearchOptions from './components/SearchOptions';
 import SearchResult from './components/SearchResult';
 import Playlist from './components/Playlist';
 import PlaylistForm from './components/PlaylistForm';
+import ConnectButton from './components/ConnectButton';
 
 const SPOTIFY_API_AUTH = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_SEARCH = 'https://api.spotify.com/v1/search?q=';
@@ -199,6 +200,12 @@ const App = () => {
 
   return (
     <div className="App">
+      <ConnectButton link={userAuthUrl} />
+
+      <h1>A Playlist, Please.</h1>
+
+      <p>Search for an artist or song to create a playlist of recommended tracks.</p>
+
       <Search onSearch={handleSearchInput}/>
       <SearchOptions 
         searchFilter={searchFilter} 
@@ -242,13 +249,6 @@ const App = () => {
       :
       <div></div>
     }
-
-    <br/>
-    <a
-      href={userAuthUrl}
-    >
-      Connect to Spotify
-    </a>
       
     </div>
   );
