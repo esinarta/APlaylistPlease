@@ -3,6 +3,12 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 
+import Search from './components/Search';
+import SearchOptions from './components/SearchOptions';
+import SearchResult from './components/SearchResult';
+import Playlist from './components/Playlist';
+import PlaylistForm from './components/PlaylistForm';
+
 const SPOTIFY_API_AUTH = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_API_SEARCH = 'https://api.spotify.com/v1/search?q=';
 const SPOTIFY_API_RECOMMENDATIONS = 'https://api.spotify.com/v1/recommendations?seed_'
@@ -117,16 +123,17 @@ const App = () => {
   }, [userToken, params.access_token]);
 
   const getUserId = React.useCallback(async () => {
-      const res =await axios({
-        method: 'get',
-        url: `${SPOTIFY_API_USER_PROFILE}`,
-        headers: {
-          'Accept': 'application/json', 
-          'Authorization': `Bearer ${userToken}`,
-          'Content-Type': 'application/json',
-        }
-      })
-      return res.data;
+    // const popup = window.open(userAuthUrl, 'Login with Spotify', 'width=800, height=600');
+    const res =await axios({
+      method: 'get',
+      url: `${SPOTIFY_API_USER_PROFILE}`,
+      headers: {
+        'Accept': 'application/json', 
+        'Authorization': `Bearer ${userToken}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    return res.data;
     }, [userToken]);
 
   React.useEffect(() => {
@@ -245,137 +252,6 @@ const App = () => {
       
     </div>
   );
-}
-
-const Search = ({ search, onSearch }) => {
-  return (
-    <div>
-      <label htmlFor="search">Search: </label>
-      <input 
-        id="search" 
-        type="text" 
-        value={search} 
-        onChange={onSearch} 
-      />
-    </div>
-  )
-}
-
-const SearchOptions = ({ searchFilter, setSearchFilter }) => {
-  return (
-    <div>
-      <label>
-        Artist
-        <input
-          type="radio"
-          name="searchType"
-          value="artist"
-          checked={searchFilter === "artist"}
-          onChange={event => setSearchFilter(event.target.value)}
-        />
-      </label>
-
-      <label>
-        Track
-        <input
-          type="radio"
-          name="searchType"
-          value="track"
-          checked={searchFilter === "track"}
-          onChange={event => setSearchFilter(event.target.value)}
-        />
-      </label>
-    </div>
-  )
-}
-
-const SearchResult = ({ searchResults, handleSearchSelection }) => {
-  return (
-    <div>
-      <h4>Search Results: </h4>
-      {searchResults.length ? 
-        <div>
-          {searchResults.map((result) => (
-            <li
-              key={result.id}
-              onClick={() => handleSearchSelection(result)}
-            >
-              {result.name}
-            </li>
-          ))}
-        </div>
-        : 
-        <div>No results</div>
-      }
-    </div>
-  )
-}
-
-const Playlist = ({ playlist }) => {
-  return (
-    <div>
-      {playlist.length ? 
-        <div>
-          <h4>Playlist: </h4>
-          {playlist.map((item) => (
-            <li key={item.id}>
-              {item.name} - {item.artists[0].name}
-            </li>
-          ))}
-        </div>
-        : 
-        <div></div>
-      }
-    </div>
-  )
-}
-
-const PlaylistForm = (props) => {
-  return (
-    <div>
-      <div>
-        <label htmlFor="search">Playlist Name: </label>
-        <input 
-          id="playlistName" 
-          type="text" 
-          value={props.playListName} 
-          onChange={props.handlePlaylistNameInput}
-        />
-      </div>
-      <div>
-        <label htmlFor="search">Playlist Description: </label>
-        <input 
-          id="playlistDesc" 
-          type="text" 
-          value={props.playlistDesc} 
-          onChange={props.handlePlaylistDescInput}
-        />
-      </div>
-      <div>
-        <label>
-          Public
-          <input
-            type="radio"
-            name="playlistPublic"
-            value="public"
-            checked={props.playlistPublic}
-            onChange={event => props.setPlaylistPublic(event.target.value)}
-          />
-        </label>
-
-        <label>
-          Private
-          <input
-            type="radio"
-            name="playlistPublic"
-            value="private"
-            checked={!props.playlistPublic}
-            onChange={event => props.setPlaylistPublic(!event.target.value)}
-          />
-        </label>
-      </div>
-    </div>
-  )
 }
 
 export default App;
