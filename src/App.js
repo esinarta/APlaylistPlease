@@ -227,7 +227,6 @@ const App = () => {
       <Playlist
         playlist={playlist}
         searchSelection={searchSelection}
-        searchFilter={searchFilter}
       />
       <br/>
 

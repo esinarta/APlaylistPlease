@@ -29,11 +29,14 @@ const SearchResult = ({ searchResults, handleSearchSelection, searchSelection, s
               onClick={() => {
                   handleSearchSelection(result);
                   setSearchSelection(result);
-                  console.log(searchSelection);
                 }
               }
             >
-              {result.name}
+              {result.type === "artist" ?
+                <p>{result.name}</p>
+                :
+                <p>{result.name} - {result.artists[0].name}</p>
+              }
             </li>
           ))}
         </div>
