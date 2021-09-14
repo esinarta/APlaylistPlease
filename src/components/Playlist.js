@@ -22,7 +22,7 @@ const Playlist = ({ playlist, searchSelection }) => {
           <h4>Here's a playlist based on: </h4>
           {searchSelection.type === "artist" ? 
             <div>
-              <img src={searchSelection.images[2].url} alt="Artist image" />
+              <img src={searchSelection.images[2].url} alt="Artist profile" />
               <p>{searchSelection.name}</p>
             </div>
             :

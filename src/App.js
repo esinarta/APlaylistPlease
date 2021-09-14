@@ -240,11 +240,11 @@ const App = () => {
           handlePlaylistNameInput={handlePlaylistNameInput}
           handlePlaylistDescInput={handlePlaylistDescInput}
         />
-        <button
-        onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
-        >
-          Save Playlist
-        </button>
+
+        <AppButton
+          text="Save Playlist"
+          onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
+        />
       </div>
       :
       <div></div>

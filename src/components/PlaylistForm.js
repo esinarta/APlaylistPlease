@@ -1,25 +1,47 @@
 const PlaylistForm = (props) => {
+  const containerStyle = {
+    width: "40%",
+    margin: "0 auto"
+  }
+
+  const labelStyle = {
+    padding: "0.5em"
+  }
+  
+  const inputStyle = {
+    border: "none",
+    borderRadius: "50px",
+    outline: "none",
+    padding: "0.8em",
+  }
+
+  const radioStyle = {
+    padding: "1em",
+  }
+
   return (
-    <div>
-      <div>
-        <label htmlFor="search">Playlist Name: </label>
+    <div style={containerStyle}>
+      <div style={labelStyle}>
+        <label style={labelStyle} htmlFor="search">Playlist Name: </label>
         <input 
+          style={inputStyle}
           id="playlistName" 
           type="text" 
           value={props.playListName} 
           onChange={props.handlePlaylistNameInput}
         />
       </div>
-      <div>
-        <label htmlFor="search">Playlist Description: </label>
+      <div style={labelStyle}>
+        <label style={labelStyle} htmlFor="search">Playlist Description: </label>
         <input 
+          style={inputStyle}
           id="playlistDesc" 
           type="text" 
           value={props.playlistDesc} 
           onChange={props.handlePlaylistDescInput}
         />
       </div>
-      <div>
+      <div style={radioStyle}>
         <label>
           Public
           <input
