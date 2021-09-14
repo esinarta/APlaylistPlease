@@ -1,6 +1,6 @@
 import './SearchResult.css'
 
-const SearchResult = ({ searchResults, handleSearchSelection }) => {
+const SearchResult = ({ searchResults, handleSearchSelection, searchSelection, setSearchSelection }) => {
   const containerStyle = {
     width: "40%",
     backgroundColor: "white",
@@ -13,7 +13,7 @@ const SearchResult = ({ searchResults, handleSearchSelection }) => {
   const listStyle = {
     listStyleType: "none",
     textAlign: "left",
-    borderBottom: "1px solid #CCC",
+    borderBottom: "1px solid #CCCCCC",
     padding: "1em",
   };
 
@@ -26,7 +26,12 @@ const SearchResult = ({ searchResults, handleSearchSelection }) => {
               className="resultItem"
               style={listStyle}
               key={result.id}
-              onClick={() => handleSearchSelection(result)}
+              onClick={() => {
+                  handleSearchSelection(result);
+                  setSearchSelection(result);
+                  console.log(searchSelection);
+                }
+              }
             >
               {result.name}
             </li>

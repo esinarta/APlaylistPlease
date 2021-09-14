@@ -34,6 +34,7 @@ const App = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [searchFilter, setSearchFilter] = React.useState("artist");
   const [searchResults, setSearchResults] = React.useState([]);
+  const [searchSelection, setSearchSelection] = React.useState({});
   const [playlist, setPlaylist] = React.useState([]);
   const [userToken, setUserToken] = React.useState('');
   const [userId, setUserId] = React.useState('');
@@ -219,10 +220,14 @@ const App = () => {
       <SearchResult 
         searchResults={searchResults} 
         handleSearchSelection={handleSearchSelection}
+        searchSelection={searchSelection}
+        setSearchSelection={setSearchSelection}
       />
 
       <Playlist
         playlist={playlist}
+        searchSelection={searchSelection}
+        searchFilter={searchFilter}
       />
       <br/>
 
