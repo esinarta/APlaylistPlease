@@ -1,11 +1,30 @@
+import './SearchResult.css'
+
 const SearchResult = ({ searchResults, handleSearchSelection }) => {
+  const containerStyle = {
+    width: "40%",
+    backgroundColor: "white",
+    color: "black",
+    margin: "0 auto",
+    borderRadius: "20px",
+    overflow: "hidden"
+  };
+  
+  const listStyle = {
+    listStyleType: "none",
+    textAlign: "left",
+    borderBottom: "1px solid #CCC",
+    padding: "1em",
+  };
+
   return (
-    <div>
+    <div style={containerStyle}>
       {searchResults.length ? 
         <div>
-          <h4>Search Results: </h4>
           {searchResults.map((result) => (
             <li
+              className="resultItem"
+              style={listStyle}
               key={result.id}
               onClick={() => handleSearchSelection(result)}
             >

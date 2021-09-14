@@ -27,7 +27,7 @@ const ConnectButton = ({ link }) => {
 
   return (
     <div style={containerStyle}>
-      <img src={SpotifyIcon} style={iconStyle}/>
+      <img src={SpotifyIcon} alt="Spotify Icon" style={iconStyle}/>
       <a style={style} href={link}>
         Connect to Spotify
       </a>

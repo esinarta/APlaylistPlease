@@ -1,0 +1,5 @@
+.resultItem:hover {
+  background: #1CB954;
+  color: #FFFFFF;
+  cursor: pointer;
+}

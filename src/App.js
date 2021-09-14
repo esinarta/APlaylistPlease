@@ -211,7 +211,7 @@ const App = () => {
       />
 
       <AppButton
-        text="Submit"
+        text="Search"
         disabled={!searchTerm}
         onClick={handleSearchSubmit}
       />
