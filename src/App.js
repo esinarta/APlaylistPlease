@@ -23,11 +23,15 @@ const BASIC_AUTH = Buffer.from(
 ).toString('base64');
 const scope = 'playlist-modify-private playlist-modify-public';
 
+let redirectUrl =   'location' in global && global['location']['host'] === 'localhost:3000'
+  ? process.env.REACT_APP_SPOTIFY_REDIRECT_DEV
+  : process.env.REACT_APP_SPOTIFY_REDIRECT_PROD;
+
 let userAuthUrl = SPOTIFY_API_USER_AUTH;
 userAuthUrl += '?response_type=token';
 userAuthUrl += '&client_id=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_CLIENT_ID);
 userAuthUrl += '&scope=' + encodeURIComponent(scope);
-userAuthUrl += '&redirect_uri=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_REDIRECT);
+userAuthUrl += '&redirect_uri=' + encodeURIComponent(redirectUrl);
 
 const App = () => {
   const [spotifyToken, setSpotifyToken] = React.useState('');
