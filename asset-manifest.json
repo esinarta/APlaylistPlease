@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/APlaylistPlease/static/css/main.72dcfc2c.chunk.css",
+    "main.js": "/APlaylistPlease/static/js/main.f61dbfe7.chunk.js",
+    "main.js.map": "/APlaylistPlease/static/js/main.f61dbfe7.chunk.js.map",
+    "runtime-main.js": "/APlaylistPlease/static/js/runtime-main.a7b06cea.js",
+    "runtime-main.js.map": "/APlaylistPlease/static/js/runtime-main.a7b06cea.js.map",
+    "static/js/2.0502bc59.chunk.js": "/APlaylistPlease/static/js/2.0502bc59.chunk.js",
+    "static/js/2.0502bc59.chunk.js.map": "/APlaylistPlease/static/js/2.0502bc59.chunk.js.map",
+    "static/js/3.fcf0be56.chunk.js": "/APlaylistPlease/static/js/3.fcf0be56.chunk.js",
+    "static/js/3.fcf0be56.chunk.js.map": "/APlaylistPlease/static/js/3.fcf0be56.chunk.js.map",
+    "index.html": "/APlaylistPlease/index.html",
+    "static/css/main.72dcfc2c.chunk.css.map": "/APlaylistPlease/static/css/main.72dcfc2c.chunk.css.map",
+    "static/js/2.0502bc59.chunk.js.LICENSE.txt": "/APlaylistPlease/static/js/2.0502bc59.chunk.js.LICENSE.txt",
+    "static/media/Spotify_Icon_RGB_White.ecd54051.png": "/APlaylistPlease/static/media/Spotify_Icon_RGB_White.ecd54051.png",
+    "static/media/search_black_24dp.6c95e853.svg": "/APlaylistPlease/static/media/search_black_24dp.6c95e853.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a7b06cea.js",
+    "static/js/2.0502bc59.chunk.js",
+    "static/css/main.72dcfc2c.chunk.css",
+    "static/js/main.f61dbfe7.chunk.js"
+  ]
+}
