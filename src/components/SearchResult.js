@@ -41,7 +41,7 @@ const SearchResult = ({ searchResults, handleSearchSelection, searchSelection, s
           ))}
         </div>
         : 
-        <div></div>
+        null
       }
     </div>
   )

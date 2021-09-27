@@ -1,11 +1,12 @@
 const PlaylistForm = (props) => {
   const containerStyle = {
-    width: "40%",
-    margin: "0 auto"
+    width: "100%",
+    margin: "0 auto",
   }
 
   const labelStyle = {
-    padding: "0.5em"
+    padding: "0.5em",
+    display: "block",
   }
   
   const inputStyle = {
@@ -13,10 +14,15 @@ const PlaylistForm = (props) => {
     borderRadius: "50px",
     outline: "none",
     padding: "0.8em",
+    width: "50%",
   }
 
   const radioStyle = {
     padding: "1em",
+  }
+
+  const radioLabelStyle = {
+    padding: "0 0 0 1em",
   }
 
   return (
@@ -53,7 +59,7 @@ const PlaylistForm = (props) => {
           />
         </label>
 
-        <label>
+        <label style={radioLabelStyle}>
           Private
           <input
             type="radio"

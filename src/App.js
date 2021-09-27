@@ -3,6 +3,9 @@ import React from 'react';
 import axios from 'axios';
 import qs from 'qs';
 
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
 import Search from './components/Search';
 import SearchOptions from './components/SearchOptions';
 import SearchResult from './components/SearchResult';
@@ -45,6 +48,23 @@ const App = () => {
   const [playlistName, setPlaylistName] = React.useState('');
   const [playlistDesc, setPlaylistDesc] = React.useState('');
   const [playlistPublic, setPlaylistPublic] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '50%',
+    padding: '2%',
+    bgcolor: '#444',
+    borderRadius: '25px',
+    boxShadow: 12,
+    textAlign: "center"
+  };
 
   const getSpotifyToken = async () => {
     const res = await axios({
@@ -88,8 +108,8 @@ const App = () => {
     }
   }
 
-
   const handleSearchSelection = (result) => {
+    setSearchTerm("");
     getRecommendations(result.id);
   }
 
@@ -215,12 +235,16 @@ const App = () => {
         setSearchFilter={setSearchFilter}
       />
 
-      <SearchResult 
-        searchResults={searchResults} 
-        handleSearchSelection={handleSearchSelection}
-        searchSelection={searchSelection}
-        setSearchSelection={setSearchSelection}
-      />
+      {searchTerm && searchResults ?
+        <SearchResult 
+          searchResults={searchResults} 
+          handleSearchSelection={handleSearchSelection}
+          searchSelection={searchSelection}
+          setSearchSelection={setSearchSelection}
+        />
+        :
+        null
+      }
 
       <Playlist
         playlist={playlist}
@@ -228,24 +252,35 @@ const App = () => {
       />
       <br/>
 
-    { playlist.length && userToken ?
+    {playlist.length && userToken ?
       <div>
-        <PlaylistForm
-          playListName={playlistName}
-          playlistDesc={playlistDesc}
-          playlistPublic={playlistPublic}
-          setPlaylistPublic={setPlaylistPublic}
-          handlePlaylistNameInput={handlePlaylistNameInput}
-          handlePlaylistDescInput={handlePlaylistDescInput}
-        />
-
         <AppButton
           text="Save Playlist"
-          onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
+          onClick={handleOpen}
         />
+        <Modal
+          open={open}
+          onClose={handleClose}
+        >
+          <Box sx={style}>
+            <PlaylistForm
+              playListName={playlistName}
+              playlistDesc={playlistDesc}
+              playlistPublic={playlistPublic}
+              setPlaylistPublic={setPlaylistPublic}
+              handlePlaylistNameInput={handlePlaylistNameInput}
+              handlePlaylistDescInput={handlePlaylistDescInput}
+            />
+
+            <AppButton
+              text="Save Playlist"
+              onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
+            />
+          </Box>
+        </Modal>
       </div>
       :
-      <div></div>
+      null
     }
       
     </div>

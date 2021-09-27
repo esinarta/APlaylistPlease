@@ -40,7 +40,7 @@ const Playlist = ({ playlist, searchSelection }) => {
           </div>
         </div>
         : 
-        <div></div>
+        null
       }
     </div>
   )
