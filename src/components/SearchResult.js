@@ -21,7 +21,7 @@ const SearchResult = ({ searchResults, handleSearchSelection, searchSelection, s
     <div style={containerStyle}>
       {searchResults.length ? 
         <div>
-          {searchResults.map((result) => (
+          {searchResults.slice(0,5).map((result) => (
             <li
               className="resultItem"
               style={listStyle}

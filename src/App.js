@@ -67,27 +67,27 @@ const App = () => {
     }
   }, [spotifyToken]);
 
-  const handleSearchInput = event => {
+  const handleSearch = event => {
     setSearchTerm(event.target.value);
+    if (searchTerm) {
+      axios({
+        method: 'get',
+        url: `${SPOTIFY_API_SEARCH}${searchTerm}&type=${searchFilter}`,
+        headers: {
+          'Accept': 'application/json', 
+          'Authorization': `Bearer ${spotifyToken}`,
+          'Content-Type': 'application/json',
+        }
+      }).then((res) => {
+        if (res.data.artists) {
+          setSearchResults([...res.data.artists.items])
+        } else { 
+          setSearchResults([...res.data.tracks.items]);
+        }
+      });
+    }
   }
 
-  const handleSearchSubmit = () => {
-    axios({
-      method: 'get',
-      url: `${SPOTIFY_API_SEARCH}${searchTerm}&type=${searchFilter}`,
-      headers: {
-        'Accept': 'application/json', 
-        'Authorization': `Bearer ${spotifyToken}`,
-        'Content-Type': 'application/json',
-      }
-    }).then((res) => {
-      if (res.data.artists) {
-        setSearchResults([...res.data.artists.items])
-      } else { 
-        setSearchResults([...res.data.tracks.items]);
-      }
-    });
-  }
 
   const handleSearchSelection = (result) => {
     getRecommendations(result.id);
@@ -209,16 +209,10 @@ const App = () => {
 
       <p>Search for an artist or song to create a playlist of recommended tracks.</p>
 
-      <Search onSearch={handleSearchInput}/>
+      <Search onSearch={handleSearch}/>
       <SearchOptions 
         searchFilter={searchFilter} 
         setSearchFilter={setSearchFilter}
-      />
-
-      <AppButton
-        text="Search"
-        disabled={!searchTerm}
-        onClick={handleSearchSubmit}
       />
 
       <SearchResult 
