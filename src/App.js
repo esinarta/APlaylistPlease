@@ -5,6 +5,7 @@ import qs from 'qs';
 
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import { useMediaQuery } from 'react-responsive'
 
 import Search from './components/Search';
 import SearchOptions from './components/SearchOptions';
@@ -50,16 +51,21 @@ const App = () => {
   const [playlistPublic, setPlaylistPublic] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const [playlistSaveSuccess, setPlaylistSaveSuccess] = React.useState(false);
+  
+  const isPortrait = useMediaQuery({ orientation: 'portrait' });
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setPlaylistSaveSuccess(false);
+  };
 
-  const style = {
+  const modalStyle = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
+    width: isPortrait ? "90%" : "50%",
     padding: '2%',
     bgcolor: '#444',
     borderRadius: '25px',
@@ -264,7 +270,7 @@ const App = () => {
           open={open}
           onClose={handleClose}
         >
-          <Box sx={style}>
+          <Box sx={modalStyle}>
             {playlistSaveSuccess ?
               <div>
                 Playlist saved successfully.

@@ -1,4 +1,8 @@
+import { useMediaQuery } from 'react-responsive'
+
 const PlaylistForm = (props) => {
+  const isPortrait = useMediaQuery({ orientation: 'portrait' });
+
   const containerStyle = {
     width: "100%",
     margin: "0 auto",
@@ -14,7 +18,7 @@ const PlaylistForm = (props) => {
     borderRadius: "50px",
     outline: "none",
     padding: "0.8em",
-    width: "50%",
+    width: isPortrait ? "80%" : "50%",
   }
 
   const radioStyle = {

@@ -1,6 +1,10 @@
+import { useMediaQuery } from 'react-responsive'
+
 const Playlist = ({ playlist, searchSelection }) => {
+  const isPortrait = useMediaQuery({ orientation: 'portrait' });
+
   const containerStyle = {
-    width: "40%",
+    width: isPortrait ? "80%" : "40%",
     backgroundColor: "white",
     color: "black",
     margin: "0 auto",
