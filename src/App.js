@@ -49,6 +49,7 @@ const App = () => {
   const [playlistDesc, setPlaylistDesc] = React.useState('');
   const [playlistPublic, setPlaylistPublic] = React.useState(true);
   const [open, setOpen] = React.useState(false);
+  const [playlistSaveSuccess, setPlaylistSaveSuccess] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -209,7 +210,8 @@ const App = () => {
       },
       data: JSON.stringify(trackUris),
     }).then((res) => {
-      console.log(res.data);
+      console.log(res);
+      setPlaylistSaveSuccess(true);
     });
   }
 
@@ -263,19 +265,27 @@ const App = () => {
           onClose={handleClose}
         >
           <Box sx={style}>
-            <PlaylistForm
-              playListName={playlistName}
-              playlistDesc={playlistDesc}
-              playlistPublic={playlistPublic}
-              setPlaylistPublic={setPlaylistPublic}
-              handlePlaylistNameInput={handlePlaylistNameInput}
-              handlePlaylistDescInput={handlePlaylistDescInput}
-            />
+            {playlistSaveSuccess ?
+              <div>
+                Playlist saved successfully.
+              </div>
+              :
+              <div>
+                <PlaylistForm
+                  playListName={playlistName}
+                  playlistDesc={playlistDesc}
+                  playlistPublic={playlistPublic}
+                  setPlaylistPublic={setPlaylistPublic}
+                  handlePlaylistNameInput={handlePlaylistNameInput}
+                  handlePlaylistDescInput={handlePlaylistDescInput}
+                />
 
-            <AppButton
-              text="Save Playlist"
-              onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
-            />
+                <AppButton
+                  text="Save Playlist"
+                  onClick={() => savePlaylist(playlistName, playlistDesc, playlistPublic)}
+                />
+              </div>
+            }
           </Box>
         </Modal>
       </div>
