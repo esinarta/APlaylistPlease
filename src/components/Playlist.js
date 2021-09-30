@@ -26,12 +26,20 @@ const Playlist = ({ playlist, searchSelection }) => {
           <h4>Here's a playlist based on: </h4>
           {searchSelection.type === "artist" ? 
             <div>
-              <img src={searchSelection.images[2].url} alt="Artist profile" />
+              {searchSelection.images[2] ? 
+                <img src={searchSelection.images[2].url} alt="Artist profile" />
+                :
+                null
+              }
               <p>{searchSelection.name}</p>
             </div>
             :
             <div>
-              <img src={searchSelection.album.images[2].url} alt="Song artwork" />
+              {searchSelection.album.images[2] ?
+                <img src={searchSelection.album.images[2].url} alt="Song artwork" />
+                :
+                null
+              }
               <p>{searchSelection.name} - {searchSelection.artists[0].name}</p>
             </div>
           }
@@ -44,6 +52,13 @@ const Playlist = ({ playlist, searchSelection }) => {
           </div>
         </div>
         : 
+        null
+      }
+      {!playlist.length && searchSelection.type ?
+        <div style={{marginTop: "5%"}}>
+          Sorry, there are no recommendations for this {searchSelection.type}.
+        </div>
+        :
         null
       }
     </div>
