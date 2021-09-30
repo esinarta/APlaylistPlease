@@ -1,6 +1,6 @@
 import SpotifyIcon from '../assets/Spotify_Icon_RGB_White.png'
 
-const ConnectButton = ({ link, onClick }) => {
+const ConnectButton = ({ link }) => {
   const containerStyle = {
     backgroundColor: "#26D863",
     padding: "10px",
@@ -28,7 +28,7 @@ const ConnectButton = ({ link, onClick }) => {
   return (
     <div style={containerStyle}>
       <img src={SpotifyIcon} alt="Spotify Icon" style={iconStyle}/>
-      <a style={style} href={link} onClick={onClick}>
+      <a style={style} href={link}>
         Connect to Spotify
       </a>
     </div>

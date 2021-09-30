@@ -134,20 +134,15 @@ const App = () => {
     });
   }
 
-  const spotifyLogin = () => {
-    const popup = window.open(
-      userAuthUrl, 
-      'Login with Spotify', 
-      'width=400, height=500'
-    );
-  }
-
-  // Function taken from Spotify API example:
+  // Function modified from Spotify API example:
   // https://github.com/spotify/web-api-auth-examples/blob/master/implicit_grant/public/index.html
   const getHashParams = () => {
-    let hashParams = {};
-    let e, r = /([^&;=]+)=?([^&;]*)/g, q = window.location.hash.substring(1);
-    while (e = r.exec(q)) {
+    const hashParams = {};
+    const r = /([^&;=]+)=?([^&;]*)/g;
+    const q = window.location.hash.substring(1);
+    let e = r;
+
+    while ((e = r.exec(q)) !== null) {
        hashParams[e[1]] = decodeURIComponent(e[2]);
     }
     return hashParams;
@@ -162,7 +157,6 @@ const App = () => {
   }, [userToken, params.access_token]);
 
   const getUserId = React.useCallback(async () => {
-    // const popup = window.open(userAuthUrl, 'Login with Spotify', 'width=400, height=500');
     const res =await axios({
       method: 'get',
       url: `${SPOTIFY_API_USER_PROFILE}`,
@@ -239,10 +233,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <ConnectButton 
-        // link={userAuthUrl}
-        onClick={spotifyLogin} 
-      />
+      <ConnectButton link={userAuthUrl} />
 
       <h1>A Playlist, Please.</h1>
 
