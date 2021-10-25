@@ -74,8 +74,8 @@ const App = () => {
     textAlign: "center"
   };
 
-  const getSpotifyToken = async () => {
-    const res = await axios({
+  React.useEffect(() => {
+    axios({
       method: 'post',
       url: SPOTIFY_API_AUTH,
       headers: {
@@ -83,13 +83,8 @@ const App = () => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({ 'grant_type': 'client_credentials' })
-    });
-    return res.data;
-  }
-
-  React.useEffect(() => {
-    getSpotifyToken().then((data) => {
-      setSpotifyToken(data.access_token);
+    }).then((res) => {
+      setSpotifyToken(res.data.access_token);
     });
   }, []);
 
