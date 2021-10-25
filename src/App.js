@@ -15,17 +15,17 @@ import PlaylistForm from './components/PlaylistForm';
 import ConnectButton from './components/ConnectButton';
 import AppButton from './components/AppButton';
 
-const SPOTIFY_API_AUTH = 'https://accounts.spotify.com/api/token';
-const SPOTIFY_API_SEARCH = 'https://api.spotify.com/v1/search?q=';
-const SPOTIFY_API_RECOMMENDATIONS = 'https://api.spotify.com/v1/recommendations?seed_'
-const SPOTIFY_API_USER_AUTH = 'https://accounts.spotify.com/authorize';
-const SPOTIFY_API_USER_PROFILE = 'https://api.spotify.com/v1/me';
-const SPOTIFY_API_USER_PLAYLIST = 'https://api.spotify.com/v1/users/';
-const SPOTIFY_API_USER_PLAYLIST_ADD = 'https://api.spotify.com/v1/playlists/';
-const BASIC_AUTH = Buffer.from(
-  `${process.env.REACT_APP_SPOTIFY_CLIENT_ID}:${process.env.REACT_APP_SPOTIFY_CLIENT_SECRET}`
-).toString('base64');
-const scope = 'playlist-modify-private playlist-modify-public';
+import {
+  SPOTIFY_API_AUTH,
+  SPOTIFY_API_SEARCH,
+  SPOTIFY_API_RECOMMENDATIONS,
+  SPOTIFY_API_USER_AUTH,
+  SPOTIFY_API_USER_PROFILE,
+  SPOTIFY_API_USER_PLAYLIST,
+  SPOTIFY_API_USER_PLAYLIST_ADD,
+  BASIC_AUTH,
+  SCOPE
+} from './constants'
 
 let redirectUrl =   'location' in global && global['location']['host'] === 'localhost:3000'
   ? process.env.REACT_APP_SPOTIFY_REDIRECT_DEV
@@ -34,7 +34,7 @@ let redirectUrl =   'location' in global && global['location']['host'] === 'loca
 let userAuthUrl = SPOTIFY_API_USER_AUTH;
 userAuthUrl += '?response_type=token';
 userAuthUrl += '&client_id=' + encodeURIComponent(process.env.REACT_APP_SPOTIFY_CLIENT_ID);
-userAuthUrl += '&scope=' + encodeURIComponent(scope);
+userAuthUrl += '&scope=' + encodeURIComponent(SCOPE);
 userAuthUrl += '&redirect_uri=' + encodeURIComponent(redirectUrl);
 
 const App = () => {
@@ -49,14 +49,15 @@ const App = () => {
   const [playlistName, setPlaylistName] = React.useState('');
   const [playlistDesc, setPlaylistDesc] = React.useState('');
   const [playlistPublic, setPlaylistPublic] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [playlistSaveSuccess, setPlaylistSaveSuccess] = React.useState(false);
   
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
+  const handleModalOpen = () => setIsModalOpen(true);
+  
+  const handleModalClose = () => {
+    setIsModalOpen(false);
     setPlaylistSaveSuccess(false);
   };
 
@@ -87,12 +88,10 @@ const App = () => {
   }
 
   React.useEffect(() => {
-    if (spotifyToken === "") {
-      getSpotifyToken().then((data) => {
-        setSpotifyToken(data.access_token);
-      });
-    }
-  }, [spotifyToken]);
+    getSpotifyToken().then((data) => {
+      setSpotifyToken(data.access_token);
+    });
+  }, []);
 
   const handleSearch = event => {
     setSearchTerm(event.target.value);
@@ -151,10 +150,8 @@ const App = () => {
   let params = getHashParams();
 
   React.useEffect(() => {
-    if (userToken === "") {
-      setUserToken(params.access_token);
-    }
-  }, [userToken, params.access_token]);
+    setUserToken(params.access_token);
+  }, []);
 
   const getUserId = React.useCallback(async () => {
     const res =await axios({
@@ -170,12 +167,12 @@ const App = () => {
     }, [userToken]);
 
   React.useEffect(() => {
-    if (userId === "" && userToken) {
+    if (userToken) {
       getUserId().then((data) => {
         setUserId(data.id);
       });
     }
-  }, [userId, getUserId, userToken]);
+  }, [getUserId, userToken]);
 
   const savePlaylist = (playlistName, playlistDesc, playlistPublic) => {
     axios({
@@ -266,11 +263,11 @@ const App = () => {
       <div>
         <AppButton
           text="Save Playlist"
-          onClick={handleOpen}
+          onClick={handleModalOpen}
         />
         <Modal
-          open={open}
-          onClose={handleClose}
+          open={isModalOpen}
+          onClose={handleModalClose}
         >
           <Box sx={modalStyle}>
             {playlistSaveSuccess ?
