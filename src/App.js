@@ -151,7 +151,7 @@ const App = () => {
 
   React.useEffect(() => {
     setUserToken(params.access_token);
-  }, []);
+  }, [params.access_token]);
 
   const getUserId = React.useCallback(async () => {
     const res =await axios({
