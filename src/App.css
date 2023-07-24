@@ -15,8 +15,3 @@ body {
   background-attachment: fixed;
   overscroll-behavior: none;
 }
-
-ConnectButton {
-  display: flex;
-  margin-left: auto;
-}
